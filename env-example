@@ -1,0 +1,5 @@
+# API URL for backend services
+REACT_APP_API_URL=https://api.example.com
+
+# OpenAI API key for AI features
+REACT_APP_AI_API_KEY=your-openai-api-key
