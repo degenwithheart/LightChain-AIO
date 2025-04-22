@@ -1,6 +1,6 @@
 # Lightchain AIO - AI-Powered Block Explorer & Launchpad
 
-Lightchain AIO is an innovative platform that combines the functionalities of a blockchain explorer, a token launchpad, and AI-powered tools. This project provides users with a seamless experience in exploring blockchain data, managing token launches, and leveraging AI for insights and interactions.
+Lightchain AIO is an innovative platform that combines the functionalities of a blockchain explorer, a token launchpad, and AI-powered tools. This project provides users with a seamless experience [...]
 
 ---
 
@@ -216,21 +216,9 @@ This project is licensed under the MIT License. See the `LICENSE` file for detai
 
 For questions or support, please contact [Your Name or Company] at [your-email@example.com].
 
-```
-
 ---
 
-### **Instructions for Setup**
-1. Copy the above `README.md` content into the `README.md` file in your project directory.
-2. Replace placeholders like `yourusername`, `yourdomain.com`, and `your-email@example.com` with your actual details.
-3. Ensure the `.env` file is created with the correct API keys and URLs.
+## ☕ Support My Work
+If you find my work useful or interesting, consider supporting me to keep me going!
 
-Let me know if you need further assistance!
----
-
-### **Instructions for Setup**
-1. Copy the above `README.md` content into the `README.md` file in your project directory.
-2. Replace placeholders like `yourusername`, `yourdomain.com`, and `your-email@example.com` with your actual details.
-3. Ensure the `.env` file is created with the correct API keys and URLs.
-
-Let me know if you need further assistance!
+<a href="https://www.buymeacoffee.com/stewiemo"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=☕&slug=stewiemo&button_colour=FFDD00&font_colour=000000&font_family=Arial&outline_colour=000000&coffee_colour=ffffff"></a>
