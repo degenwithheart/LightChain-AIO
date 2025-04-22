@@ -61,12 +61,12 @@ Follow these steps to set up the project locally:
 
 ### **1. Clone the Repository**
 ```bash
-git clone https://github.com/yourusername/lightchain-aio.git
+git clone https://github.com/stuartmoseley/LightChain-AIO.git
 ```
 
 ### **2. Navigate to the Project Directory**
 ```bash
-cd lightchain-aio
+cd LightChain-AIO
 ```
 
 ### **3. Install Dependencies**
