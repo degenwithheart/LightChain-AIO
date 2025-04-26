@@ -27,7 +27,7 @@ Lightchain AIO is an innovative platform that combines the functionalities of a 
 - Display connected wallet details and manage blockchain interactions.
 
 ### **6. Multi-Language Support**
-- Switch between English and Spanish dynamically using the language switcher.
+- Switch between English, Spanish, French & German dynamically using the language switcher.
 
 ### **7. Progressive Web App (PWA)**
 - Offline support with service worker caching.
