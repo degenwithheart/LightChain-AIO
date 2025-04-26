@@ -47,60 +47,6 @@ Lightchain AIO is an innovative platform that combines the functionalities of a 
 
 ---
 
-## Prerequisites
-
-Before you begin, ensure you have the following installed on your machine:
-- **Node.js** (v14 or higher) and **npm** (v6 or higher)
-- **MetaMask** browser extension for wallet integration
-
----
-
-## Installation
-
-Follow these steps to set up the project locally:
-
-### **1. Clone the Repository**
-```bash
-git clone https://github.com/stuartmoseley/LightChain-AIO.git
-```
-
-### **2. Navigate to the Project Directory**
-```bash
-cd LightChain-AIO
-```
-
-### **3. Install Dependencies**
-Install the required dependencies using npm:
-```bash
-npm install
-```
-
----
-
-## Running the Application
-
-### **1. Start the Development Server**
-To start the development server, run:
-```bash
-npm start
-```
-The application will be available at `http://localhost:3000`.
-
-### **2. Build for Production**
-To create a production build, run:
-```bash
-npm run build
-```
-The build files will be generated in the `build/` directory.
-
-### **3. Serve the Production Build**
-To serve the production build locally, you can use a static server like `serve`:
-```bash
-npx serve -s build
-```
-
----
-
 ## Project Structure
 
 The project is organized as follows:
@@ -135,22 +81,6 @@ lightchain-aio/
 ├── package.json                # Project metadata and dependencies
 └── README.md                   # Project documentation
 ```
-
----
-
-## Environment Variables
-
-To configure the application, create a `.env` file in the root directory with the following variables:
-
-```env
-# API URL for backend services
-REACT_APP_API_URL=https://api.example.com
-
-# OpenAI API key for AI features
-REACT_APP_AI_API_KEY=your-openai-api-key
-```
-
-Replace `your-openai-api-key` with your actual OpenAI API key.
 
 ---
 
