@@ -116,39 +116,6 @@ lightchain-aio/
 
 ---
 
-## Contributing
-
-Contributions are welcome! To contribute:
-1. Fork the repository.
-2. Create a new branch for your feature or bug fix:
-   ```bash
-   git checkout -b feature-name
-   ```
-3. Commit your changes:
-   ```bash
-   git commit -m "Add feature-name"
-   ```
-4. Push to your branch:
-   ```bash
-   git push origin feature-name
-   ```
-5. Open a pull request.
-
----
-
-## License
-
-This project is licensed under the MIT License. See the `LICENSE` file for details.
-
----
-
-## Contact
-
-For questions or support, please contact myself at Github.
-
----
-
-## ☕ Support My Work
-If you find my work useful or interesting, consider supporting me to keep me going!
-
-<a href="https://www.buymeacoffee.com/stewiemo"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=☕&slug=stewiemo&button_colour=FFDD00&font_colour=000000&font_family=Arial&outline_colour=000000&coffee_colour=ffffff"></a>
+If this platform is useful to you or your team, consider supporting the builder:
+SOL: 4U3kLekCh53rXxxQE3hSbqoKKLzZpLYYZRTc26R8mnGe
+Tips help keep LightChain-AIO open and evolving!
