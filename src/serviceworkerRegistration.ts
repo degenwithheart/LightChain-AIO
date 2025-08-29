@@ -8,9 +8,7 @@ const isLocalhost = Boolean(
   window.location.hostname === "localhost" ||
     window.location.hostname === "[::1]" ||
     // 127.0.0.0/8
-    window.location.hostname.match(
-      /^127(?:\.(?:25[0-5]|2[0-4]\d|[01]?\d?\d)){3}$/
-    )
+    window.location.hostname.match(/^127(?:\.(?:25[0-5]|2[0-4]\d|[01]?\d?\d)){3}$/)
 );
 
 type RegistrationWithWaiting = ServiceWorkerRegistration & { waiting?: ServiceWorker | null };
@@ -22,17 +20,14 @@ export function register() {
     window.addEventListener("load", async () => {
       try {
         const registration = await navigator.serviceWorker.register(swUrl);
-        // Listen for updatefound to detect new SW installation
         registration.addEventListener("updatefound", () => {
           const installing = registration.installing;
           if (!installing) return;
           installing.addEventListener("statechange", () => {
             if (installing.state === "installed") {
               if (navigator.serviceWorker.controller) {
-                // New content is available; emit event with registration
                 window.dispatchEvent(new CustomEvent("swUpdated", { detail: { registration } }));
               } else {
-                // Content cached for offline use
                 window.dispatchEvent(new Event("swCached"));
               }
             }
@@ -52,7 +47,7 @@ export function register() {
  */
 export async function applyUpdate(registration: RegistrationWithWaiting | null) {
   if (!registration || !registration.waiting) return Promise.resolve();
-  return new Promise<void>((resolve, reject) => {
+  return new Promise<void>((resolve) => {
     const waiting = registration.waiting;
     if (!waiting) {
       resolve();
@@ -66,10 +61,9 @@ export async function applyUpdate(registration: RegistrationWithWaiting | null) 
 
     window.addEventListener("controllerchange", onControllerChange);
 
-    // Ask the waiting SW to skip waiting
     waiting.postMessage({ type: "SKIP_WAITING" });
 
-    // Fallback: timeout if controllerchange doesn't fire within 10s
+    // Fallback: timeout in 10s to avoid hanging
     setTimeout(() => {
       window.removeEventListener("controllerchange", onControllerChange);
       resolve();
