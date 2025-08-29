@@ -1,5 +1,12 @@
-# API URL for backend services
-REACT_APP_API_URL=https://api.example.com
+# Copy to .env and fill values. Never commit secrets to source control.
 
-# OpenAI API key for AI features
-REACT_APP_AI_API_KEY=your-openai-api-key
+# Public RPC url used as fallback by the app (read-only)
+REACT_APP_RPC_URL=https://cloudflare-eth.com
+
+# Optional: discovery / analytics
+REACT_APP_SENTRY_DSN=
+
+# Optional: Chain configuration
+REACT_APP_CHAIN_ID=1
+
+# Don't put private keys / mnemonics here. Use GitHub secrets for CI or a secrets manager.
