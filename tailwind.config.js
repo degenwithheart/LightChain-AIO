@@ -1,5 +1,5 @@
 module.exports = {
-  purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
+  content: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
   darkMode: 'class', // Enables dark mode via a class
   theme: {
     extend: {
@@ -13,9 +13,6 @@ module.exports = {
         '144': '36rem',
       },
     },
-  },
-  variants: {
-    extend: {},
   },
   plugins: [],
 };
