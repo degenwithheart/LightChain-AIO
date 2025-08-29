@@ -1,12 +1,5 @@
-# Copy to .env and fill values. Never commit secrets to source control.
-
-# Public RPC url used as fallback by the app (read-only)
-REACT_APP_RPC_URL=https://cloudflare-eth.com
-
-# Optional: discovery / analytics
-REACT_APP_SENTRY_DSN=
-
-# Optional: Chain configuration
+# Production-ready environment example. Copy to .env (do NOT commit .env).
+REACT_APP_RPC_URL=https://mainnet.infura.io/v3/YOUR_INFURA_PROJECT_ID
 REACT_APP_CHAIN_ID=1
-
-# Don't put private keys / mnemonics here. Use GitHub secrets for CI or a secrets manager.
+REACT_APP_SENTRY_DSN=
+# Do not store private keys or mnemonics in env files. Use a secrets manager.
