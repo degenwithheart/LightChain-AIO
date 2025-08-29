@@ -19,9 +19,7 @@
     "jsx": "react-jsx",
     "outDir": "build",
     "baseUrl": "src",
-    "paths": {
-      "@/*": ["*"]
-    },
+    "paths": { "@/*": ["*"] },
     "types": ["node", "jest"]
   },
   "include": ["src"],

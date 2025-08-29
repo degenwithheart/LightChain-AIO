@@ -1,39 +1,32 @@
-import React, { Component, ErrorInfo } from "react";
-import { logError } from "../../utils/errorLogger";
+import React from 'react';
 
-interface ErrorBoundaryProps {
-  children: React.ReactNode;
-}
+type State = { hasError: boolean; error?: Error | null };
 
-interface ErrorBoundaryState {
-  hasError: boolean;
-}
-
-class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  constructor(props: ErrorBoundaryProps) {
+export default class ErrorBoundary extends React.Component<React.PropsWithChildren<unknown>, State> {
+  constructor(props: React.PropsWithChildren<unknown>) {
     super(props);
-    this.state = { hasError: false };
+    this.state = { hasError: false, error: null };
   }
 
-  static getDerivedStateFromError() {
-    // Update state so the next render shows the fallback UI.
-    return { hasError: true };
+  static getDerivedStateFromError(error: Error): State {
+    return { hasError: true, error };
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    // Log the error using the centralized error logger
-    logError(error, "ErrorBoundary");
-    console.error("Error Info:", errorInfo);
+  componentDidCatch(error: Error, info: React.ErrorInfo) {
+    // Optionally: send to Sentry if REACT_APP_SENTRY_DSN present
+    // eslint-disable-next-line no-console
+    console.error('Unhandled error caught by ErrorBoundary:', error, info);
   }
 
   render() {
     if (this.state.hasError) {
-      // Fallback UI when an error occurs
-      return <h1>Something went wrong. Please try again later.</h1>;
+      return (
+        <div role="alert" className="p-4 rounded bg-red-50 text-red-800">
+          <strong>Something went wrong</strong>
+          <div className="mt-2">{this.state.error?.message || 'An unexpected error occurred.'}</div>
+        </div>
+      );
     }
-
     return this.props.children;
   }
 }
-
-export default ErrorBoundary;

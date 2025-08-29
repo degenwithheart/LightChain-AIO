@@ -1,30 +1,12 @@
-import React, { useState } from 'react';
-import { Controlled as CodeMirror } from 'react-codemirror2';
-import 'codemirror/lib/codemirror.css';
-import 'codemirror/theme/material.css';
-import 'codemirror/mode/javascript/javascript';
+import React from 'react';
 
-const CodeEditor: React.FC = () => {
-    const [code, setCode] = useState('// Write your code here...');
-
-    const handleCodeChange = (editor: any, data: any, value: string) => {
-        setCode(value);
-    };
-
-    return (
-        <div className="p-4">
-            <h2 className="text-xl font-bold mb-4">Code Editor</h2>
-            <CodeMirror
-                value={code}
-                options={{
-                    lineNumbers: true,
-                    mode: 'javascript',
-                    theme: 'material',
-                }}
-                onBeforeChange={handleCodeChange}
-            />
-        </div>
-    );
-};
-
-export default CodeEditor;
+export default function CodeEditor({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  return (
+    <textarea
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      rows={8}
+      className="w-full p-2 rounded bg-slate-900 text-slate-100 font-mono"
+    />
+  );
+}

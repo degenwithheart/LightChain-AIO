@@ -1,0 +1,6 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* App global overrides */
+html, body, #root { height: 100%; }

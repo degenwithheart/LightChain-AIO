@@ -1,46 +1,29 @@
-/**
- * Production-ready ethers.js helpers
- * - getProvider(): read-only provider (injected or RPC fallback)
- * - connectWallet(): requests account access and returns provider, signer, address
- * - getContract(): returns ethers.Contract connected to provider or signer
- * - read(): typed read-only call
- * - write(): send tx and wait for confirmations with robust error handling
- */
-import { ethers, providers, Signer, Contract } from "ethers";
+import { ethers, providers, Signer, Contract } from 'ethers';
 
 declare global {
-  interface Window {
-    ethereum?: any;
-  }
+  interface Window { ethereum?: any; }
 }
 
 export type ProviderOrSigner = providers.Provider | Signer;
 
 export function getProvider(): providers.BaseProvider {
-  if (typeof window !== "undefined" && window.ethereum) {
-    return new ethers.providers.Web3Provider(window.ethereum, "any");
+  if (typeof window !== 'undefined' && window.ethereum) {
+    return new ethers.providers.Web3Provider(window.ethereum, 'any');
   }
-  const rpc = process.env.REACT_APP_RPC_URL || "https://cloudflare-eth.com";
+  const rpc = process.env.REACT_APP_RPC_URL || 'https://cloudflare-eth.com';
   return new ethers.providers.StaticJsonRpcProvider(rpc);
 }
 
-export async function connectWallet(): Promise<{
-  provider: providers.Web3Provider;
-  signer: Signer;
-  address: string;
-}> {
-  if (typeof window === "undefined" || !window.ethereum) {
-    throw new Error("No injected Ethereum provider (e.g. MetaMask) found in the browser.");
+export async function connectWallet(): Promise<{ provider: providers.Web3Provider; signer: Signer; address: string }> {
+  if (typeof window === 'undefined' || !window.ethereum) {
+    throw new Error('No injected Ethereum provider found in the browser.');
   }
-
-  const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-
+  const provider = new ethers.providers.Web3Provider(window.ethereum, 'any');
   try {
-    await provider.send("eth_requestAccounts", []);
+    await provider.send('eth_requestAccounts', []);
   } catch (err) {
-    throw new Error("User denied account access.");
+    throw new Error('User denied account access.');
   }
-
   const signer = provider.getSigner();
   const address = await signer.getAddress();
   return { provider, signer, address };
@@ -52,7 +35,7 @@ export function getContract(address: string, abi: any, providerOrSigner?: Provid
 }
 
 export async function read<T = any>(contract: Contract, method: string, args: any[] = []): Promise<T> {
-  if (!contract || typeof (contract as any)[method] !== "function") {
+  if (!contract || typeof (contract as any)[method] !== 'function') {
     throw new Error(`Contract method "${method}" not found.`);
   }
   // @ts-ignore
@@ -66,15 +49,13 @@ export async function write(
   overrides: ethers.CallOverrides | ethers.PayableOverrides = {},
   confirmations = 1
 ): Promise<ethers.providers.TransactionReceipt> {
-  if (!contract || typeof (contract as any)[method] !== "function") {
+  if (!contract || typeof (contract as any)[method] !== 'function') {
     throw new Error(`Contract method "${method}" not found or not a function.`);
   }
-
   const signerPresent = Boolean((contract as any).signer && (contract as any).signer._isSigner);
   if (!signerPresent) {
-    throw new Error("Contract must be connected to a signer for write operations.");
+    throw new Error('Contract must be connected to a signer for write operations.');
   }
-
   try {
     // @ts-ignore
     const txResponse: ethers.providers.TransactionResponse = await (contract as any)[method](...args, overrides);
@@ -87,9 +68,4 @@ export async function write(
     const message = err?.error?.message || err?.message || String(err);
     throw new Error(`Transaction error: ${message}`);
   }
-}
-
-export async function waitForTx(hash: string, provider?: providers.Provider, confirmations = 1) {
-  const p = provider ?? getProvider();
-  return p.waitForTransaction(hash, confirmations);
 }

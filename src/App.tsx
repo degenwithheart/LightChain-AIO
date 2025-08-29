@@ -1,131 +1,98 @@
-import React, { useEffect, useState } from "react";
-import { register, applyUpdate } from "./serviceworkerRegistration";
+import React, { Suspense, useEffect, useState } from 'react';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import ErrorBoundary from './components/common/ErrorBoundary';
+import Loader from './components/common/Loader';
+import { register, applyUpdate } from './serviceworkerRegistration';
 
-/**
- * Root App with production-ready SW update banner.
- */
+const Home = React.lazy(() => import('./pages/Home'));
+const Explorer = React.lazy(() => import('./components/BlockExplorer/ExplorerDashboard'));
+const AI = React.lazy(() => import('./components/AIIntegration/ChatWidget'));
+const DevTools = React.lazy(() => import('./components/DeveloperTools/ApiConsole'));
+const Launch = React.lazy(() => import('./components/TokenLaunch/LaunchForm'));
+
+function Nav() {
+  return (
+    <nav className="bg-white border-b shadow-sm">
+      <div className="container mx-auto px-4 py-3 flex gap-6 items-center">
+        <Link to="/" className="font-semibold text-lg">Lightchain AIO</Link>
+        <div className="flex gap-4">
+          <Link to="/explorer" className="text-sm text-slate-600">Explorer</Link>
+          <Link to="/ai" className="text-sm text-slate-600">AI</Link>
+          <Link to="/dev" className="text-sm text-slate-600">Dev Tools</Link>
+          <Link to="/launch" className="text-sm text-slate-600">Launch</Link>
+        </div>
+      </div>
+    </nav>
+  );
+}
 
 export default function App(): JSX.Element {
   const [updateAvailable, setUpdateAvailable] = useState(false);
-  const [swRegistration, setSwRegistration] = useState<ServiceWorkerRegistration | null>(null);
+  const [registration, setRegistration] = useState<ServiceWorkerRegistration | null>(null);
   const [isApplying, setIsApplying] = useState(false);
 
   useEffect(() => {
     register();
-
     const onSwUpdated = (e: Event) => {
-      try {
-        const custom = e as CustomEvent<{ registration: ServiceWorkerRegistration }>;
-        const registration = custom?.detail?.registration;
-        if (registration) {
-          setSwRegistration(registration);
-          setUpdateAvailable(true);
-        }
-      } catch (err) {
-        // non-critical
-        // eslint-disable-next-line no-console
-        console.warn("swUpdated event could not be processed", err);
+      const custom = e as CustomEvent<{ registration: ServiceWorkerRegistration }>;
+      const reg = custom?.detail?.registration;
+      if (reg) {
+        setRegistration(reg);
+        setUpdateAvailable(true);
       }
     };
-
-    window.addEventListener("swUpdated", onSwUpdated as EventListener);
-    return () => {
-      window.removeEventListener("swUpdated", onSwUpdated as EventListener);
-    };
+    window.addEventListener('swUpdated', onSwUpdated as EventListener);
+    return () => window.removeEventListener('swUpdated', onSwUpdated as EventListener);
   }, []);
 
-  const handleApplyUpdate = async () => {
-    if (!swRegistration) return;
+  const onApply = async () => {
+    if (!registration) return;
     setIsApplying(true);
     try {
-      await applyUpdate(swRegistration as any);
+      await applyUpdate(registration as any);
       window.location.reload();
     } catch (err) {
-      // eslint-disable-next-line no-console
-      console.error("Failed to apply service worker update:", err);
+      console.error('applyUpdate failed', err);
       setIsApplying(false);
     }
   };
 
-  const handleDismiss = () => {
-    setUpdateAvailable(false);
-    setSwRegistration(null);
-  };
-
   return (
-    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
-      <main style={{ flex: 1 }}>
-        <h1 style={{ padding: "1.5rem" }}>Lightchain AIO</h1>
-        {/* Your app content */}
-      </main>
+    <BrowserRouter>
+      <div className="min-h-screen flex flex-col">
+        <Nav />
+        <main className="container mx-auto p-6 flex-1">
+          <ErrorBoundary>
+            <Suspense fallback={<Loader />}>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/explorer" element={<Explorer />} />
+                <Route path="/ai" element={<AI />} />
+                <Route path="/dev" element={<DevTools />} />
+                <Route path="/launch" element={<Launch />} />
+                <Route path="*" element={<div>Not Found</div>} />
+              </Routes>
+            </Suspense>
+          </ErrorBoundary>
+        </main>
 
-      {updateAvailable && (
-        <div
-          role="status"
-          aria-live="polite"
-          style={{
-            position: "fixed",
-            left: 16,
-            right: 16,
-            bottom: 16,
-            display: "flex",
-            gap: 12,
-            alignItems: "center",
-            justifyContent: "space-between",
-            padding: "12px 16px",
-            background: "linear-gradient(90deg,#111827,#0f172a)",
-            color: "white",
-            borderRadius: 8,
-            boxShadow: "0 6px 18px rgba(2,6,23,0.4)",
-            zIndex: 9999
-          }}
-        >
-          <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width={20} height={20} fill="currentColor" aria-hidden>
-              <path d="M12 5v7l5 3" />
-              <path d="M12 3a9 9 0 100 18 9 9 0 000-18z" fill="none" stroke="currentColor" strokeWidth="1" />
-            </svg>
-            <div>
-              <div style={{ fontWeight: 600 }}>New version available</div>
-              <div style={{ fontSize: 13, opacity: 0.9 }}>Refresh to update to the latest version.</div>
+        {updateAvailable && (
+          <div className="fixed left-4 right-4 bottom-6 z-50">
+            <div className="bg-slate-800 text-white p-4 rounded-lg shadow-lg flex justify-between items-center">
+              <div>
+                <div className="font-semibold">New version available</div>
+                <div className="text-sm opacity-80">Apply the update to load the latest version.</div>
+              </div>
+              <div className="flex gap-2">
+                <button onClick={() => { setUpdateAvailable(false); setRegistration(null); }} className="px-3 py-1 rounded border border-white/20">Dismiss</button>
+                <button onClick={onApply} disabled={isApplying} className="px-3 py-1 rounded bg-teal-400 text-teal-900 font-semibold">
+                  {isApplying ? 'Updating…' : 'Update'}
+                </button>
+              </div>
             </div>
           </div>
-
-          <div style={{ display: "flex", gap: 8 }}>
-            <button
-              onClick={handleDismiss}
-              style={{
-                background: "transparent",
-                border: "1px solid rgba(255,255,255,0.12)",
-                color: "white",
-                padding: "8px 12px",
-                borderRadius: 6,
-                cursor: "pointer"
-              }}
-              aria-label="Dismiss update notification"
-            >
-              Dismiss
-            </button>
-
-            <button
-              onClick={handleApplyUpdate}
-              disabled={isApplying}
-              style={{
-                background: "#06b6d4",
-                border: "none",
-                color: "#07203a",
-                padding: "8px 12px",
-                borderRadius: 6,
-                cursor: "pointer",
-                fontWeight: 700
-              }}
-              aria-label="Apply update and reload"
-            >
-              {isApplying ? "Updating…" : "Update"}
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+    </BrowserRouter>
   );
 }
