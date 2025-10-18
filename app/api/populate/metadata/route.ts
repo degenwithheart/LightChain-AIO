@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
     // Fetch Solana token list
     const response = await fetch('https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json', {
       headers: {
-        'User-Agent': 'LightChain-Solana/1.0'
+        'User-Agent': 'LightChain-AIO/1.0'
       },
       next: { revalidate: 3600 } // Cache for 1 hour
     })

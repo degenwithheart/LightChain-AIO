@@ -39,7 +39,7 @@ export async function GET(request: NextRequest) {
     console.log('Fetching tokens from DexScreener...')
     const dexResponse = await fetch(`${request.nextUrl.origin}/api/populate/tokens?limit=${limit * 2}&minLiquidity=${minLiquidity}`, {
       headers: {
-        'User-Agent': 'LightChain-Solana/1.0'
+        'User-Agent': 'LightChain-AIO/1.0'
       }
     })
 
@@ -58,7 +58,7 @@ export async function GET(request: NextRequest) {
       const addresses = dexTokens.map((token: any) => token.address).join(',')
       const metadataResponse = await fetch(`${request.nextUrl.origin}/api/populate/metadata?addresses=${addresses}`, {
         headers: {
-          'User-Agent': 'LightChain-Solana/1.0'
+          'User-Agent': 'LightChain-AIO/1.0'
         }
       })
 
@@ -89,7 +89,7 @@ export async function GET(request: NextRequest) {
         try {
           const tradeResponse = await fetch(`${request.nextUrl.origin}/api/populate/trades?tokenAddress=${token.address}&limit=1`, {
             headers: {
-              'User-Agent': 'LightChain-Solana/1.0'
+              'User-Agent': 'LightChain-AIO/1.0'
             }
           })
 

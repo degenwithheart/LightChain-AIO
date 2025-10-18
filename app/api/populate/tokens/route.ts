@@ -80,7 +80,7 @@ export async function GET(request: NextRequest) {
       try {
         const response = await fetch(`https://api.dexscreener.com/latest/dex/search?q=${term}`, {
           headers: {
-            'User-Agent': 'LightChain-Solana/1.0'
+            'User-Agent': 'LightChain-AIO/1.0'
           },
           next: { revalidate: 30 }
         })

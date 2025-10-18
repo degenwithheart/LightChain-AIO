@@ -19,7 +19,7 @@ export async function GET(
     try {
       const dexscreenerResponse = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${tokenAddress}`, {
         headers: {
-          'User-Agent': 'LightChain-Solana/1.0'
+          'User-Agent': 'LightChain-AIO/1.0'
         },
         next: { revalidate: 10 } // Cache for 10 seconds
       })
@@ -55,7 +55,7 @@ export async function GET(
     try {
       const jupiterResponse = await fetch(`https://price.jup.ag/v4/price?ids=${tokenAddress}`, {
         headers: {
-          'User-Agent': 'LightChain-Solana/1.0'
+          'User-Agent': 'LightChain-AIO/1.0'
         },
         next: { revalidate: 10 }
       })

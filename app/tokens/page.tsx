@@ -7,6 +7,7 @@ import { Footer } from '../../components/Footer'
 import { Button } from '../../components/ui/button'
 import { Loading } from '../../components/Loading'
 import { Input } from '../../components/ui/input'
+import { APP_CONFIG } from '../../lib/constants'
 
 interface Token {
   address: string
@@ -94,7 +95,12 @@ export default function TokensPage() {
     <div className="min-h-screen bg-background">
       <Navbar />
 
-      <main className="container mx-auto px-4 py-8">
+      <main 
+        className="container mx-auto px-4 py-8 pt-16"
+        style={{ 
+          minHeight: `clamp(${APP_CONFIG.ui.minContentHeight.mobile}, 50vh, ${APP_CONFIG.ui.minContentHeight.desktop})`
+        }}
+      >
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="text-center mb-8">

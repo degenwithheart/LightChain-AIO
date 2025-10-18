@@ -4,12 +4,13 @@ import './globals.css'
 import { BackgroundPaths } from '../components/ui/background-paths'
 import { ClientWalletProvider } from '../components/ClientWalletProvider'
 import { ErrorBoundary } from '../components/ErrorBoundary'
+import { APP_CONFIG } from '../lib/constants'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'LightChain Solana - Modern Trading Platform',
-  description: 'Advanced perpetual DEX trading with glassmorphism design on Solana',
+  title: `${APP_CONFIG.fullName} - ${APP_CONFIG.tagline}`,
+  description: APP_CONFIG.description,
 }
 
 export default function RootLayout({
@@ -23,7 +24,7 @@ export default function RootLayout({
         <ClientWalletProvider>
           <ErrorBoundary>
             <BackgroundPaths />
-            <div className="relative z-10 min-h-screen">
+            <div className="relative z-10 min-h-screen pt-16">
               {children}
             </div>
           </ErrorBoundary>

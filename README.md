@@ -16,11 +16,13 @@ A complete perpetual DEX trading platform on Solana with modern glassmorphism de
 - **Token Support**: USDC, SOL, BTC, ETH trading pairs
 - **Perpetual DEX**: Leverage trading with up to 50x leverage
 
-### AI Trading Agents
+### AI Trading Agents *(Coming Soon)*
 - **Autonomous Agents**: AI-powered trading strategies
 - **Performance Tracking**: Real-time P&L and metrics
 - **Strategy Templates**: Pre-built trading algorithms
 - **Multi-Agent Support**: Run multiple strategies simultaneously
+
+*Note: AI features are currently in development and will be available in upcoming releases.*
 
 ### Advanced Analytics
 - **Portfolio Analytics**: Diversification and risk metrics
@@ -40,8 +42,8 @@ A complete perpetual DEX trading platform on Solana with modern glassmorphism de
 
 1. **Clone and install:**
    ```bash
-   git clone <repository-url>
-   cd lightchain-solana
+   git clone https://github.com/degenwithheart/LightChain-AIO.git
+   cd LightChain-AIO
    npm install
    ```
 
@@ -58,7 +60,47 @@ A complete perpetual DEX trading platform on Solana with modern glassmorphism de
 
 4. **Open [http://localhost:3000](http://localhost:3000)**
 
-## 🏗️ Architecture
+## ⚙️ Configuration
+
+### Constants Configuration
+
+LightChain uses a centralized constants file (`lib/constants.ts`) for all application-wide configuration, ensuring consistency and maintainability:
+
+```typescript
+export const APP_CONFIG = {
+  // App Identity & Branding
+  name: 'LightChain',
+  fullName: 'LightChain Solana',
+  logo: { text: 'LC', fullText: 'LIGHTCHAIN', tag: 'SOLANA' },
+
+  // Contact Information
+  contact: {
+    support: { email: 'support@lightchain.solana', hours: {...} },
+    privacy: { email: 'privacy@lightchain.solana' },
+    business: { address: 'TBD - Business Address' }
+  },
+
+  // Social Media Links
+  social: {
+    discord: { url: 'https://discord.gg/lightchain' },
+    twitter: { url: 'https://twitter.com/LightChainSol' },
+    github: { url: 'https://github.com/degenwithheart/LightChain-AIO' }
+  },
+
+  // UI Constants
+  ui: {
+    minContentHeight: { desktop: '800px', mobile: '600px' }
+  },
+
+  // API Configuration
+  api: {
+    baseUrl: 'https://api.lightchain.solana',
+    websocketUrl: 'wss://api.lightchain.solana/ws'
+  }
+}
+```
+
+All components use these constants instead of hardcoded values, making the application easily configurable and maintainable.
 
 ### Components
 - `AgentCard` - AI agent display with performance metrics
@@ -158,10 +200,10 @@ npm start
 ### Docker Deployment
 ```bash
 # Build image
-docker build -t lightchain-solana .
+docker build -t LightChain-AIO .
 
 # Run container
-docker run -p 3000:3000 lightchain-solana
+docker run -p 3000:3000 LightChain-AIO
 ```
 
 ### Environment Setup
@@ -291,9 +333,8 @@ npm run test:e2e     # Run E2E tests
 - [Security Guide](./docs/security.md)
 
 ### Community
-- [Discord](https://discord.gg/lightchain)
-- [Twitter](https://twitter.com/lightchain_sol)
-- [GitHub Issues](https://github.com/lightchain/lightchain-solana/issues)
+- [Twitter](https://twitter.com/LightChainSol)
+- [GitHub Issues](https://github.com/degenwithheart/LightChain-AIO/issues)
 
 ## 📄 License
 

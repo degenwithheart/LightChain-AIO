@@ -8,10 +8,12 @@ import { PositionsTable } from '../../../components/PositionsTable'
 import { Button } from '../../../components/ui/button'
 import { Loading } from '../../../components/Loading'
 import { usePerpDex } from '../../../hooks/usePerpDex'
+import { APP_CONFIG } from '../../../lib/constants'
 import { useUSDCBalance } from '../../../hooks/useUSDCBalance'
 import { useUSDCApprove } from '../../../hooks/useUSDCApprove'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { TOKEN_MINTS } from '../../../config/solana'
+import { Footer } from '../../../components/Footer'
 
 interface TradeFormData {
   side: 'Long' | 'Short'
@@ -119,7 +121,12 @@ export default function TradePage() {
     <div className="min-h-screen bg-background">
       <Navbar />
 
-      <div className="pt-20 px-4 pb-8">
+      <div 
+        className="pt-20 px-4 pb-8"
+        style={{ 
+          minHeight: `clamp(${APP_CONFIG.ui.minContentHeight.mobile}, 50vh, ${APP_CONFIG.ui.minContentHeight.desktop})`
+        }}
+      >
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="mb-8">
@@ -269,6 +276,7 @@ export default function TradePage() {
           )}
         </div>
       </div>
+      <Footer />
     </div>
   )
 }

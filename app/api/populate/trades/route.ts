@@ -84,7 +84,7 @@ export async function GET(request: NextRequest) {
 
     const fetchOptions = {
       headers: {
-        'User-Agent': 'LightChain-Solana/1.0'
+        'User-Agent': 'LightChain-AIO/1.0'
       },
       next: { revalidate: 5 } // Cache for 5 seconds for live data
     } as unknown as RequestInit

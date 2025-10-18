@@ -179,7 +179,7 @@ export const securityHeaders = {
 // CORS configuration
 export const corsOptions = {
   origin: process.env.NODE_ENV === 'production'
-    ? ['https://lightchain-solana.com', 'https://www.lightchain-solana.com']
+    ? ['https://LightChain-AIO.com', 'https://www.LightChain-AIO.com']
     : ['http://localhost:3000', 'http://localhost:3001'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
