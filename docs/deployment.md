@@ -2,7 +2,7 @@
 
 ## Overview
 
-This guide covers the deployment process for LightChain Solana, including prerequisites, environment setup, and deployment strategies.
+LightChain Solana is a frontend-only Next.js application that can be deployed to various hosting platforms. This guide covers deployment options and configuration.
 
 ## Prerequisites
 
@@ -11,43 +11,223 @@ This guide covers the deployment process for LightChain Solana, including prereq
 - **Node.js**: v18.0.0 or higher
 - **npm**: v8.0.0 or higher
 - **Git**: v2.30.0 or higher
-- **Docker**: v20.10.0 or higher (optional)
-- **Solana CLI**: v1.14.0 or higher
 
-### Network Requirements
+### Hosting Requirements
 
-- **RPC Endpoint**: Solana mainnet-beta or devnet
-- **Database**: PostgreSQL 13+ or MongoDB 5+
-- **Redis**: v6.0+ (for caching and sessions)
-- **Load Balancer**: Nginx or similar
+- **Static Hosting**: Vercel, Netlify, or any static host
+- **Domain**: Custom domain (optional)
+- **SSL Certificate**: Automatic on most platforms
 
-## Environment Setup
+## Deployment Options
 
-### 1. Clone the Repository
+### Option 1: Vercel (Recommended)
+
+Vercel provides the best experience for Next.js applications with automatic deployments and optimizations.
+
+#### Steps:
+
+1. **Connect Repository:**
+   - Go to [vercel.com](https://vercel.com)
+   - Import your GitHub repository
+   - Connect `degenwithheart/LightChain-AIO`
+
+2. **Configure Build Settings:**
+   ```json
+   {
+     "buildCommand": "npm run build",
+     "outputDirectory": ".next",
+     "installCommand": "npm install",
+     "devCommand": "npm run dev"
+   }
+   ```
+
+3. **Environment Variables:**
+   ```env
+   NEXT_PUBLIC_SOLANA_RPC_URL=https://api.mainnet-beta.solana.com
+   NEXT_PUBLIC_APP_ENV=production
+   ```
+
+4. **Deploy:**
+   - Vercel automatically deploys on every push to main
+   - Custom domain can be configured in project settings
+
+### Option 2: Netlify
+
+1. **Connect Repository:**
+   - Go to [netlify.com](https://netlify.com)
+   - Import from Git
+   - Select your repository
+
+2. **Build Settings:**
+   - Build command: `npm run build`
+   - Publish directory: `.next`
+   - Node version: 18
+
+3. **Environment Variables:**
+   Same as Vercel configuration above.
+
+### Option 3: Manual Build and Deploy
+
+#### Build the Application:
 
 ```bash
-git clone https://github.com/degenwithheart/LightChain-AIO.git
-cd LightChain-AIO
-```
-
-### 2. Install Dependencies
-
-```bash
+# Install dependencies
 npm install
+
+# Build for production
+npm run build
+
+# Export static files (optional)
+npm run export
 ```
 
-### 3. Environment Configuration
+#### Deploy to Static Host:
 
-Create a `.env.local` file in the root directory:
+Upload the `.next` folder or exported files to:
+- AWS S3 + CloudFront
+- Google Cloud Storage
+- Azure Static Web Apps
+- Any static hosting service
+
+## Environment Configuration
+
+### Required Environment Variables
+
+Create a `.env.local` file in production:
 
 ```env
-# Application
+# Solana Configuration
+NEXT_PUBLIC_SOLANA_RPC_URL=https://api.mainnet-beta.solana.com
+
+# Application Settings
 NEXT_PUBLIC_APP_ENV=production
 NEXT_PUBLIC_APP_URL=https://yourdomain.com
 
-# Solana Configuration
-SOLANA_RPC_URL=https://api.mainnet-beta.solana.com
-SOLANA_NETWORK=mainnet-beta
+# Optional: Analytics
+NEXT_PUBLIC_GA_TRACKING_ID=your_google_analytics_id
+```
+
+### Environment Variable Reference
+
+| Variable | Description | Required | Default |
+|----------|-------------|----------|---------|
+| `NEXT_PUBLIC_SOLANA_RPC_URL` | Solana RPC endpoint | Yes | `https://api.mainnet-beta.solana.com` |
+| `NEXT_PUBLIC_APP_ENV` | Environment (development/production) | No | `development` |
+| `NEXT_PUBLIC_APP_URL` | Application URL | No | `http://localhost:3000` |
+
+## Build Optimization
+
+### Next.js Optimizations
+
+The application includes several performance optimizations:
+
+- **Static Generation**: Pages are pre-rendered at build time
+- **Image Optimization**: Automatic WebP/AVIF conversion
+- **Code Splitting**: Automatic route-based splitting
+- **Bundle Analysis**: Optimized bundle sizes
+
+### Performance Monitoring
+
+Monitor performance using:
+- **Next.js Analytics**: Built-in performance metrics
+- **Web Vitals**: Core Web Vitals tracking
+- **Lighthouse**: Google Lighthouse audits
+
+## Security Considerations
+
+### Environment Security
+
+- Never commit `.env.local` to version control
+- Use different RPC endpoints for production
+- Enable rate limiting on hosting platform
+
+### Content Security Policy
+
+Configure CSP headers on your hosting platform:
+
+```
+default-src 'self';
+script-src 'self' 'unsafe-inline' 'unsafe-eval';
+style-src 'self' 'unsafe-inline';
+img-src 'self' data: https:;
+font-src 'self';
+connect-src 'self' https://api.mainnet-beta.solana.com https://api.dexscreener.com;
+```
+
+## Custom Domain Setup
+
+### Vercel
+1. Go to Project Settings > Domains
+2. Add your custom domain
+3. Configure DNS records as instructed
+
+### Netlify
+1. Go to Site Settings > Domain Management
+2. Add custom domain
+3. Update DNS records
+
+## Monitoring and Maintenance
+
+### Error Tracking
+
+Set up error tracking with Sentry:
+
+```bash
+npm install @sentry/nextjs
+```
+
+Configure in `sentry.client.config.js` and `sentry.server.config.js`.
+
+### Analytics
+
+Add analytics tracking:
+
+```bash
+npm install @vercel/analytics
+```
+
+Import and use in `_app.tsx`.
+
+### Performance Monitoring
+
+Use Vercel Analytics or Google Analytics for performance monitoring.
+
+## Troubleshooting
+
+### Common Issues
+
+#### Build Failures
+- Check Node.js version compatibility
+- Ensure all dependencies are installed
+- Verify environment variables are set
+
+#### Runtime Errors
+- Check browser console for errors
+- Verify RPC endpoint connectivity
+- Ensure wallet connections work
+
+#### Performance Issues
+- Enable compression on hosting platform
+- Optimize images and bundles
+- Use CDN for static assets
+
+## Cost Optimization
+
+### Hosting Costs
+
+- **Vercel**: Free tier available, paid plans for higher usage
+- **Netlify**: Free tier with generous limits
+- **Custom**: Depends on cloud provider
+
+### Performance Optimization
+
+- Use static generation where possible
+- Implement proper caching strategies
+- Optimize bundle sizes
+
+---
+
+**Last updated:** October 18, 2025
 
 # Database
 DATABASE_URL=postgresql://user:password@localhost:5432/lightchain

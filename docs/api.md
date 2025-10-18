@@ -2,102 +2,183 @@
 
 ## Overview
 
-LightChain Solana provides a comprehensive REST API and WebSocket interface for programmatic access to trading functionality, market data, and account management.
+LightChain Solana provides a simple API for accessing market data, prices, and position information. The API is currently in development and uses mock data for demonstration purposes.
 
 ## Base URL
 
 ```
-https://api.lightchain.solana
+https://your-domain.com/api
 ```
 
-## Authentication
+**Note:** This is a frontend-only application. All API routes are Next.js API routes that run on the same domain as the frontend.
 
-All API requests require authentication using API keys. You can generate API keys in your account settings.
+## API Endpoints
 
-### Headers
+### Market Data
 
+#### Get Market Data for Token
 ```http
-X-API-Key: your_api_key_here
-X-API-Secret: your_api_secret_here
-```
-
-## REST API
-
-### Endpoints
-
-#### Market Data
-
-##### Get All Markets
-```http
-GET /api/v1/markets
-```
-
-**Response:**
-```json
-{
-  "markets": [
-    {
-      "symbol": "SOL-USDC",
-      "baseAsset": "SOL",
-      "quoteAsset": "USDC",
-      "status": "active",
-      "price": "150.25",
-      "change24h": "+2.5%"
-    }
-  ]
-}
-```
-
-##### Get Market Data
-```http
-GET /api/v1/markets/{symbol}
+GET /api/markets/{tokenAddress}
 ```
 
 **Parameters:**
-- `symbol`: Trading pair symbol (e.g., "SOL-USDC")
+- `tokenAddress`: Solana token address (string)
 
 **Response:**
 ```json
 {
-  "symbol": "SOL-USDC",
-  "price": "150.25",
-  "bid": "150.20",
-  "ask": "150.30",
-  "volume24h": "1250000",
-  "high24h": "155.00",
-  "low24h": "145.00"
+  "tokenAddress": "So11111111111111111111111111111111111111112",
+  "symbol": "SOL",
+  "name": "Solana",
+  "price": 145.67,
+  "change24h": 2.34,
+  "volume24h": 2847500000,
+  "marketCap": 65000000000,
+  "liquidity": 500000000,
+  "isActive": true,
+  "maxLeverage": 10,
+  "fundingRate": 0.0001,
+  "openInterest": 150000000,
+  "timestamp": "2025-10-18T10:30:00.000Z",
+  "source": "mock_data"
 }
 ```
 
-#### Trading
+**Status:** Returns mock data for demonstration. In production, would query DEX programs.
 
-##### Place Order
+### Price Data
+
+#### Get Current Price
 ```http
-POST /api/v1/orders
+GET /api/prices/current/{tokenAddress}
 ```
 
-**Request Body:**
-```json
-{
-  "symbol": "SOL-USDC",
-  "side": "buy",
-  "type": "limit",
-  "quantity": "10",
-  "price": "150.00",
-  "leverage": "5"
-}
-```
+**Parameters:**
+- `tokenAddress`: Solana token address (string)
 
 **Response:**
 ```json
 {
-  "orderId": "123456789",
-  "status": "pending",
-  "symbol": "SOL-USDC",
-  "side": "buy",
-  "quantity": "10",
-  "price": "150.00",
-  "timestamp": "2025-01-18T10:30:00Z"
+  "tokenAddress": "So11111111111111111111111111111111111111112",
+  "price": 145.67,
+  "priceChange24h": 2.34,
+  "volume24h": 2847500000,
+  "liquidity": 500000000,
+  "source": "dexscreener",
+  "timestamp": "2025-10-18T10:30:00.000Z"
+}
+```
+
+**Status:** Fetches real data from DexScreener API.
+
+### Position Data
+
+#### Get User Positions
+```http
+GET /api/positions/{traderAddress}
+```
+
+**Parameters:**
+- `traderAddress`: Solana wallet address (string)
+
+**Response:**
+```json
+[
+  {
+    "id": "pos_1",
+    "token": "SOL",
+    "side": "Long",
+    "size": 10,
+    "entryPrice": 140.50,
+    "currentPrice": 145.67,
+    "pnl": 51.70,
+    "pnlPercent": 3.68,
+    "leverage": 5,
+    "liquidationPrice": 112.40,
+    "timestamp": "2025-10-17T10:30:00.000Z"
+  }
+]
+```
+
+**Status:** Returns mock data for demonstration. In production, would query blockchain.
+
+### Data Population
+
+#### Populate All Data
+```http
+GET /api/populate/all
+```
+
+Populates all market data, tokens, trades, and metadata.
+
+#### Populate Tokens
+```http
+GET /api/populate/tokens
+```
+
+Fetches and caches token information from DexScreener.
+
+#### Populate Trades
+```http
+GET /api/populate/trades
+```
+
+Fetches recent trade data.
+
+#### Populate Metadata
+```http
+GET /api/populate/metadata
+```
+
+Updates token metadata and market information.
+
+## Error Responses
+
+All endpoints return errors in the following format:
+
+```json
+{
+  "error": "Error message description"
+}
+```
+
+Common HTTP status codes:
+- `400` - Bad Request (invalid parameters)
+- `404` - Not Found (token/market not found)
+- `500` - Internal Server Error
+
+## Rate Limiting
+
+Currently no rate limiting is implemented. This should be added in production.
+
+## Authentication
+
+No authentication is currently required. All endpoints are public.
+
+**Security Note:** In production, authentication and authorization should be implemented for user-specific endpoints.
+
+## Development Status
+
+- ✅ Market data endpoint (mock data)
+- ✅ Price data endpoint (real data from DexScreener)
+- ✅ Position data endpoint (mock data)
+- ✅ Data population endpoints
+- ❌ Order placement endpoints (not implemented)
+- ❌ User authentication (not implemented)
+- ❌ WebSocket real-time data (not implemented)
+
+## Future Enhancements
+
+- Real blockchain data integration
+- Order placement and management
+- User authentication and API keys
+- WebSocket streams for real-time updates
+- Rate limiting and request throttling
+- Comprehensive error handling and logging
+
+---
+
+**Last updated:** October 18, 2025
 }
 ```
 

@@ -2,52 +2,190 @@
 
 ## Overview
 
-Security is paramount at LightChain Solana. This guide outlines our security measures, best practices, and how we protect user assets and data.
+Security is a critical consideration for LightChain Solana. This guide outlines the current security measures implemented in the application.
 
-## Security Principles
+## Current Security Implementation
 
-### 1. Defense in Depth
-We implement multiple layers of security controls:
-- **Network Security**: Firewalls, DDoS protection, and secure API gateways
-- **Application Security**: Input validation, secure coding practices, and regular security audits
-- **Data Security**: Encryption at rest and in transit, secure key management
-- **Operational Security**: Access controls, monitoring, and incident response
+### Input Validation
 
-### 2. Zero Trust Architecture
-- No implicit trust in any user, device, or network
-- Continuous verification of identity and authorization
-- Least privilege access principles
+The application includes comprehensive input validation for all user inputs:
 
-### 3. Privacy by Design
-- Minimal data collection and retention
-- User consent and transparency
-- Data minimization and purpose limitation
+#### Solana Address Validation
+- **Format Validation**: Ensures addresses are valid Base58-encoded strings
+- **Length Checks**: Validates 43-44 character length
+- **Character Validation**: Only allows valid Base58 characters
+- **Trimming**: Automatic whitespace removal
+
+#### Token Amount Validation
+- **Numeric Validation**: Ensures amounts are valid numbers
+- **Range Checks**: Minimum (1e-9) and maximum (1e12) limits
+- **Precision Handling**: Prevents floating-point precision issues
+
+#### Leverage Validation
+- **Range Limits**: 1x to 50x leverage validation
+- **Type Safety**: Ensures numeric input
+
+### Error Handling
+
+#### Global Error Boundary
+- **React Error Boundaries**: Catches and handles React component errors
+- **Graceful Degradation**: Shows user-friendly error messages
+- **Error Logging**: Client-side error logging to localStorage
+
+#### API Error Handling
+- **Structured Error Responses**: Consistent error format across all endpoints
+- **HTTP Status Codes**: Proper status codes (400, 404, 500)
+- **Error Sanitization**: Prevents sensitive information leakage
+
+### Data Sanitization
+
+#### Input Sanitization
+- **String Trimming**: Automatic whitespace removal
+- **Type Coercion**: Safe type conversion for numeric inputs
+- **SQL Injection Prevention**: No database queries (frontend-only)
+
+### Security Headers (Recommended)
+
+While not currently implemented, the following security headers should be configured at the hosting level:
+
+```
+Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'
+X-Frame-Options: DENY
+X-Content-Type-Options: nosniff
+Referrer-Policy: strict-origin-when-cross-origin
+Permissions-Policy: geolocation=(), microphone=(), camera=()
+```
+
+## Wallet Security
+
+### Phantom/Solflare Integration
+- **Official Libraries**: Uses official wallet adapter libraries
+- **Connection Validation**: Validates wallet connections
+- **Address Verification**: Confirms connected wallet addresses
+
+### Transaction Security
+- **User Confirmation**: All transactions require explicit user approval
+- **Network Validation**: Ensures transactions are on correct network
+- **Amount Validation**: Double-checks transaction amounts before signing
+
+## API Security
+
+### Current State
+- **No Authentication**: All API endpoints are currently public
+- **No Rate Limiting**: No request throttling implemented
+- **Mock Data**: Most endpoints return mock data for demonstration
+
+### Recommended Security Measures
+
+#### Authentication (Future Implementation)
+```typescript
+// Planned API key authentication
+interface AuthenticatedRequest {
+  headers: {
+    'x-api-key': string;
+    'x-api-secret': string;
+  }
+}
+```
+
+#### Rate Limiting (Future Implementation)
+- Request throttling per IP
+- API key-based limits
+- Burst rate controls
+
+## Data Protection
+
+### Client-Side Storage
+- **LocalStorage**: Used only for error logs and non-sensitive data
+- **No Sensitive Data**: Never stores private keys or seed phrases
+- **Session Management**: No server-side sessions (frontend-only)
+
+### External API Security
+- **DexScreener Integration**: Secure HTTPS connections
+- **Response Validation**: Validates external API responses
+- **Fallback Handling**: Graceful handling of external API failures
 
 ## Smart Contract Security
 
-### Audit Process
+### Current Status
+- **No Smart Contracts**: Application does not deploy or interact with custom smart contracts
+- **DEX Integration**: Uses existing DEX protocols (Jupiter, etc.)
+- **Wallet Interactions**: All blockchain interactions go through user wallets
 
-All smart contracts undergo rigorous security audits:
+### Future Considerations
+- **Contract Audits**: Third-party security audits for any custom contracts
+- **Formal Verification**: Mathematical verification of contract logic
+- **Bug Bounty Programs**: Community-driven security research
 
-1. **Internal Review**: Code review by senior developers
-2. **Automated Testing**: Comprehensive test suites with 95%+ coverage
-3. **External Audit**: Third-party security firms
-4. **Bug Bounty**: Community-driven security research
+## Development Security
 
-### Current Audit Status
+### Code Security
+- **TypeScript**: Type safety prevents many common vulnerabilities
+- **ESLint**: Code quality and security rules
+- **Dependency Scanning**: Regular dependency updates and security checks
 
-| Contract | Version | Audit Firm | Date | Status |
-|----------|---------|------------|------|--------|
-| PerpDEX Core | v1.2.0 | Certik | 2025-01-15 | ✅ Passed |
-| Token Vault | v1.1.0 | OpenZeppelin | 2025-01-10 | ✅ Passed |
-| Liquidation Engine | v1.0.5 | Trail of Bits | 2025-01-05 | ✅ Passed |
+### Environment Security
+- **Environment Variables**: Sensitive configuration in environment variables
+- **No Secrets in Code**: Never commit API keys or secrets
+- **Development/Production Separation**: Different configurations for each environment
 
-### Security Features
+## Security Monitoring
 
-#### Price Oracle Security
-- Multiple price feeds from reputable sources
-- Circuit breakers for extreme price movements
-- Time-weighted average prices (TWAP)
+### Error Tracking
+- **Client-Side Logging**: Errors logged to localStorage
+- **Console Logging**: Development error visibility
+- **Future Enhancement**: Integration with error reporting services (Sentry, etc.)
+
+### Performance Monitoring
+- **Core Web Vitals**: Performance metric tracking
+- **Bundle Analysis**: Dependency security scanning
+
+## Compliance Considerations
+
+### Regulatory Compliance
+- **No Financial License**: Not a licensed financial institution
+- **Educational Purpose**: AI features marked as "coming soon"
+- **User Disclosure**: Clear risk warnings and disclaimers
+
+### Privacy Compliance
+- **Minimal Data Collection**: Only collects necessary user inputs
+- **No User Tracking**: No analytics or tracking implemented
+- **Data Retention**: No persistent user data storage
+
+## Security Roadmap
+
+### Immediate Priorities
+- [ ] Implement rate limiting for API endpoints
+- [ ] Add input sanitization for all forms
+- [ ] Configure security headers on hosting platform
+- [ ] Add HTTPS enforcement
+
+### Future Enhancements
+- [ ] User authentication system
+- [ ] API key management
+- [ ] Advanced error reporting (Sentry)
+- [ ] Security audit and penetration testing
+- [ ] Bug bounty program
+
+## Incident Response
+
+### Current Process
+1. **Detection**: Monitor error logs and user reports
+2. **Assessment**: Evaluate security impact and scope
+3. **Containment**: Disable affected features if necessary
+4. **Recovery**: Deploy fixes and security patches
+5. **Lessons Learned**: Update security measures based on incidents
+
+### Contact Information
+- **Security Issues**: Report via GitHub Issues
+- **Responsible Disclosure**: Follow responsible disclosure practices
+- **Response Time**: Best-effort response within 48 hours
+
+---
+
+**Disclaimer**: This application is in development. Security measures will be enhanced as the project matures. Users should exercise caution and never risk more than they can afford to lose.
+
+**Last updated:** October 18, 2025
 
 #### Liquidation Protection
 - Automatic liquidation at 80% maintenance margin
